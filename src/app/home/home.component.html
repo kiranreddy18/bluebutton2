@@ -1,0 +1,233 @@
+﻿
+<p class="navbar row">  
+    <span class="float-left col-md-4">
+        <img src="assets/images/My_Elth_PLUS_Logo_Transparent.png" width="100px"/>
+        <img src="assets/images/My_Elth_NAME_LOGO.png" width="100px" style="position:absolute;left:90px;top:24px;"/>
+    </span>
+    <span class="navbar-right"><a [routerLink]="['/login']" class="btn btn-info">Logout</a></span>
+</p>
+  
+<div class="col-md-12 row" *ngIf="showAuthLink">
+  <p>Please 
+    <a href="{{authorizeUrl}}">Click Here</a> to authorize access to your Medicare data</p>
+</div>
+
+<span *ngIf="!showAuthLink">
+<div class="col-md-12 row">
+  <span class="col-md-3 card" >
+    <div class="card-body" >
+      <h5 class="card-title text-info">Beneficiary Information</h5>
+      <div class="card-text">
+      <span class="col-md-3" *ngIf="patientLoading">Loading Beneficiary Information<span> <i class="fa fa-spinner fa-spin" style="font-size:36px;"></i></span></span>
+      <ul class="list-group list-group-flush" *ngIf="!patientLoading" >
+          <li class="list-group-item flex-column ">
+              <span class="float-left text-muted">Name</span>
+              <span class="float-right">{{patient.firstName}} {{patient.lastName}}</span>
+            </li>          
+            <li class="list-group-item flex-column ">
+                <span class="float-left text-muted">Id</span>
+                <span class="float-right">{{patient.id}}</span>
+              </li>                                                  
+          <li class="list-group-item flex-column ">
+            <span class="float-left text-muted">Date of Birth</span>
+            <span class="float-right">{{patient.birthDate}}</span>
+          </li>
+        </ul> 
+        </div>                       
+     </div>
+  </span>
+  <span class=""><label style="width:25px;"></label></span>
+  <span class="col-md-3 card" >
+      <div class="card-body" >
+      <h5 class="card-title text-info">Coverage(s)</h5>
+      <div class="card-text">
+      <span class="col-md-3" *ngIf="coverageLoading">Loading Coverage Information<span> <i class="fa fa-spinner fa-spin" style="font-size:36px;"></i></span></span>
+      <ul class="list-group list-group-flush" *ngIf="!coverageLoading" >
+          <li class="list-group-item flex-column" *ngFor="let cvg of coverage">
+              <span class="float-left text-muted">{{cvg.groups[0].subgroup}} {{cvg.groups[0].subplan}}</span>
+              <span class="float-right">{{cvg.status}}</span>
+          </li>
+        </ul>                      
+     </div>
+     </div>
+  </span>
+
+
+</div>
+<div class="col-md-12 row"><span><label></label></span>
+</div>
+
+<!-- container for claims listing -->
+<div class="col-md-12 row">
+    <div *ngIf="pageLoading">
+        <span>Loading Claims Information <i class="fa fa-spinner fa-spin" style="font-size:36px;"></i></span>
+    </div>
+  <span class=" card" *ngIf="!pageLoading">
+      <div class="card-header d-flex justify-content-between align-items-center label-info list-group-item-info">
+          <h5 class="mb-1" style="width:150px;">Claims Listing</h5>
+          <span class="badge badge-primary badge-pill"><small>COUNT</small> : {{totalCountSubject | async}}</span>
+      </div>
+      <div class="card-header d-flex justify-content-between align-items-center label-info list-group-item-info" *ngIf="(showingIndex != null && !(showingIndex == 'undefined'))">
+          <div class="float-right">
+            <small *ngIf="!claimListLoading"><i>Showing {{showingIndex + 1}} to {{showingIndex + 10}}</i></small>
+            <small *ngIf="claimListLoading" style="color:darkred"> <i>Fetching Claims </i> <i class="fa fa-spinner fa-spin"></i></small>
+          </div>
+      </div>      
+      <div class="list-group list-group-flush">
+          <div class="list-group-item list-group-item-action flex-column align-items-start" *ngFor="let claim of eobClaims" (click)="viewClaim(claim)" style="cursor: pointer;">
+              <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1">{{claim.id}}</h6>                  
+              </div>
+              <div><small>{{claim.billablePeriodStart}}, {{claim.allowedAmount | currency:'$':'code'}}</small>
+              </div>
+            </div>    
+      </div>
+  </span>
+  <span class="col-md-9 card" style="background-color:whitesmoke" *ngIf="!pageLoading">
+          <div class="card-body" *ngIf="selectedClaim != null">
+              <h5 class="card-title">
+                <span>Claim Information for <a href="#" [routerLink]="['/eobdetail/' , selectedClaim.id]">{{selectedClaim.id}}</a></span>
+                <span class="float-right">
+                    <span (click)="previousClaimSet()" style="padding-left:15px;cursor: pointer;">
+                        <i class="fa fa-angle-double-left fa-lg" aria-hidden="true"></i>
+                    </span>
+                  <span (click)="previousClaim()" style="padding-left:15px;cursor: pointer;">
+                      <i class="fa fa-angle-left fa-lg" aria-hidden="true"></i>
+                  </span>      
+                  <span (click)="nextClaim()" style="padding-left:15px;cursor: pointer;">
+                      <i class="fa fa-angle-right fa-lg" aria-hidden="true"></i>
+                  </span>
+                  <span (click)="nextClaimSet()" style="padding-left:15px;cursor: pointer;">
+                      <i class="fa fa-angle-double-right fa-lg" aria-hidden="true"></i>
+                  </span>
+                </span>
+              </h5>              
+              <hr/>
+
+              <span class="card-deck">   
+                  <div class="col-mb-5 card">
+                    <div class="card-body">
+                      <h5 class="card-title text-info">Claim Type Information</h5>
+                      <div class="card-text">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item flex-column ">
+                            <span class="float-left text-muted">Type</span>
+                            <span class="float-right">{{selectedClaim.type}}</span>
+                          </li>
+                          <li class="list-group-item flex-column ">
+                            <span class="float-left text-muted">Code</span>
+                            <span class="float-right">{{selectedClaim.typeCode}}</span>
+                          </li>
+                          <li class="list-group-item flex-column ">
+                            <span class="float-left text-muted">Description</span>
+                            <span class="float-right">{{selectedClaim.typeCodeDisplay}}</span>
+                          </li>
+                        </ul> 
+                      </div>
+                    </div>                       
+                  </div>
+
+                  <div class="col-mb-5 card" style="padding-left:20px;">
+                      <div class="card-body" >
+                          <h5 class="card-title text-info">Claim Amounts</h5>
+                          <div class="card-text">
+                          <ul class="list-group list-group-flush">
+                              <li class="list-group-item flex-column ">
+                                  <span class="float-left text-muted">Submitted Charges</span>
+                                  <span class="float-right">{{selectedClaim.submittedCharges | currency:'$': 'code'}}</span>
+                                </li>          
+                                <li class="list-group-item flex-column ">
+                                    <span class="float-left text-muted">Allowed Amount</span>
+                                    <span class="float-right">{{selectedClaim.allowedAmount | currency:'$': 'code'}}</span>
+                                  </li>                                                  
+                              <li class="list-group-item flex-column ">
+                                <span class="float-left text-muted">Primary Payer Payment</span>
+                                <span class="float-right">{{selectedClaim.primaryPayerAmount | currency:'$': 'code'}}</span>
+                              </li>
+                              <li class="list-group-item flex-column ">
+                                <span class="float-left text-muted">Provider Pay Amount</span>
+                                <span class="float-right">{{selectedClaim.providerPayAmount | currency:'$': 'code'}}</span>
+                              </li>
+                              <li class="list-group-item flex-column ">
+                                  <span class="float-left text-muted">Deductible Amount</span>
+                                  <span class="float-right">{{selectedClaim.deductibleAmount | currency:'$': 'code'}}</span>
+                                </li>                              
+                              <li class="list-group-item flex-column ">
+                                <span class="float-left text-muted">Bene Payment Amount</span>
+                                <span class="float-right">{{selectedClaim.benePayment | currency:'USD': '$'}}</span>
+                              </li>
+                            </ul> 
+                            </div>                       
+                      </div>
+                  </div>
+                  <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
+                </span>
+                <span class="card-deck" style="padding-top:30px;"> 
+                  <div class="col-mb-10 card" >
+                      <div class="card-body">
+                          <h5 class="card-title text-info">Claim Service(s)</h5>
+                          <div class="card-text">
+                              <table style="width:100%" class="table table-bordered table-hover">
+                                  <tr  style="background-color: #e9ecef;color: gray;"> 
+                                    <td>Sequence</td>
+                                    <td>Code</td>
+                                    <td>Quantity</td>
+                                    <td>Category</td>
+                                    <td>Service Period</td>
+                                  </tr>
+                                  <tr *ngFor="let svcLine of selectedClaim.services"> 
+                                      <td>{{svcLine.sequence}}</td>
+                                      <td>{{svcLine.serviceCode}}</td>
+                                      <td>{{svcLine.quantity}}</td>
+                                      <td>{{svcLine.categoryDisplay}}</td>
+                                      <td>{{svcLine.servicePeriodStart}} to {{svcLine.servicePeriodEnd}}</td>
+                                    </tr>                                  
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+                </span>                  
+  
+          </div>
+  </span>
+
+</div>
+</span>
+
+<!-- commenting below table view -->
+<!--
+<div>
+
+<table style="width:100%" class="table table-bordered table-hover">
+<tr  style="background-color: #e9ecef;color: gray;"> 
+<td>Claim Id</td>
+<td>Claim Type</td>
+<td>Claim Type Code</td>
+<td style="width: 267px; ">Claim Type Description</td>
+<td>Billable Period</td>
+<td>Status</td>
+<td>Primary Payer Payment</td>
+<td>Deductible Amount</td>
+<td>Provider Pay Amount</td>
+<td>Bene Payment Amount</td>
+<td>Submitted Charges</td>
+<td>Allowed Amount</td>
+</tr>
+<tr *ngFor="let claim of eobClaims">
+<td><p align="center"><a [routerLink]="['/eobdetail/' , claim.id]">{{claim.id}}</a></p></td>
+<td><p align="center">{{claim.type}}</p></td>
+<td><p align="center">{{claim.typeCode}}</p></td>
+<td style="width: 269px; ">{{claim.typeCodeDisplay}}</td>
+<td><p align="center">{{claim.billablePeriodStart}} - {{claim.billablePeriodEnd}}</p></td>
+<td><p align="center">{{claim.status}}</p></td>
+<td><p align="center">{{claim.primaryPayerAmount}}</p></td>
+<td><p align="center">{{claim.deductibleAmount}}</p></td>
+<td><p align="center">{{claim.providerPayAmount}}</p></td>
+<td><p align="center">{{claim.benePayment}}</p></td>
+<td><p align="center">{{claim.submittedCharges}}</p></td>
+<td><p align="center">{{claim.allowedAmount}}</p></td>
+</tr>
+</table>
+
+</div>
+-->

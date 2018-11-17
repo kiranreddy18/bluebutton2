@@ -1,0 +1,226 @@
+﻿
+<p class="navbar row col-md-12">  
+    <span class="float-left col-md-4">
+        <img src="assets/images/My_Elth_PLUS_Logo_Transparent.png" width="100px"/>
+        <img src="assets/images/My_Elth_NAME_LOGO.png" width="100px" style="position:absolute;left:90px;top:24px;"/>
+    </span>
+  <span class="navbar-right">
+    <a [routerLink]="['/home']" class="btn btn-info">Home</a>
+    <span><label style="padding-left:10px;"></label></span>
+    <a [routerLink]="['/login']" class="btn btn-info">Logout</a>
+  </span>
+</p>
+
+
+<div class="row col-md-12">
+  <h2>Explanation of Benefits (EOB)</h2>
+</div>
+
+<!-- first row -->
+<div class="row col-md-12" style="padding-top:30px;">
+<span class="col-md-7 float-left"> 
+    <ul class="list-group">
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Statement Date :</label></div>
+            <div class="col-xs-3"><b>{{selectedClaim.billablePeriodStart}}</b></div>
+          </div>
+        </li>
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Document Number:</label></div>
+            <div class="col-xs-3">123456</div>
+          </div>
+        </li>
+    </ul>
+</span>
+<span class="col-md-5 float-right">
+    <ul class="list-group">
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Member :</label></div>
+            <div class="col-xs-4"><label class="text-info text-uppercase"><b>{{patient.firstName}} {{patient.middleInitial}} {{patient.lastName}}</b></label></div>
+          </div>
+        </li>
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Address Line:</label></div>
+            <div class="col-xs-4"><b>{{patient.address.district}}</b></div>
+          </div>
+        </li>
+        <li class="list-group-item border-0 py-0">
+            <div class="row">
+              <div class="col-xs-3"><label>City, State, Zip:</label></div>
+              <div class="col-xs-4"><b>{{patient.address.district}}, {{patient.address.state}}, {{patient.address.postalCode}}</b></div>
+            </div>
+          </li>        
+    </ul>
+</span>
+</div>
+
+<!-- second row -->
+<div class="col-md-12 row" style="padding-top:40px;">
+
+  <!-- Subscriber Number -->
+  <span class="col-md-3">
+    <ul class="list-group">
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Subscriber Number :</label></div>
+            <div class="col-xs-3"><mark><b>{{patient.id}}</b></mark></div>
+          </div>
+        </li>
+    </ul>
+  </span>
+
+  <span class="col-md-3">
+      <!-- Subscriber ID-->
+      <ul class="list-group">
+          <li class="list-group-item border-0 py-0">
+            <div class="row">
+              <div class="col-xs-3"><label>Subscriber ID :</label></div>
+              <div class="col-xs-3"><mark><b>{{patient.id}}</b></mark></div>
+            </div>
+          </li>
+      </ul>
+    </span>
+  
+  <!-- Group ID -->
+  <span class="col-md-3">
+      <ul class="list-group">
+          <li class="list-group-item border-0 py-0">
+            <div class="row">
+              <div class="col-xs-3"><label>Group ID :</label></div>
+              <div class="col-xs-3">123ABC</div>
+            </div>
+          </li>
+      </ul> 
+    </span>
+
+  <!-- Group Number -->
+  <span class="col-md-3">
+      <ul class="list-group">
+          <li class="list-group-item border-0 py-0">
+            <div class="row">
+              <div class="col-xs-3"><label>Group Number :</label></div>
+              <div class="col-xs-3">1234ABCD</div>
+            </div>
+          </li>
+      </ul>     
+    </span>
+
+</div>  
+
+
+<!-- third row -->
+<div class="panel panel-default">
+<div class="col-md-12 row panel-body" style="padding-top:40px;">
+  <!-- Patient/Date Received-->
+  <span class="col-md-4 float-left">
+    <ul class="list-group">
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Patient :</label></div>
+            <div class="col-xs-3"><mark><b>{{patient.id}}</b></mark></div>
+          </div>
+        </li>
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Date Received :</label></div>
+            <div class="col-xs-3">20-OCT-2018</div>
+          </div>
+        </li>
+    </ul>
+  </span>
+ 
+<!-- Provider and Payee -->
+<span class="col-md-4">
+    <ul class="list-group">
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Provider : </label></div>
+            <div class="col-xs-3"><label> 123456789</label></div>
+          </div>
+        </li>
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Payee : </label></div>
+            <div class="col-xs-3"><label> 123456</label></div>
+          </div>
+        </li>
+    </ul>
+  </span>
+
+<!-- Claim Number/Date Paid -->
+<span class="col-md-4 float-right">
+    <ul class="list-group">
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Claim Number :</label></div>
+            <div class="col-xs-3"><mark><b>{{selectedClaim.id}}</b></mark></div>
+          </div>
+        </li>
+        <li class="list-group-item border-0 py-0">
+          <div class="row">
+            <div class="col-xs-3"><label>Paid Date :</label></div>
+            <div class="col-xs-3"></div>
+          </div>
+        </li>
+    </ul>    
+  </span>
+  </div>
+</div>
+
+
+
+<!-- fourth row -->
+<div class="col-md-12 row" style="padding-top:20px;">
+<table class="table table-bordered table-hover table-striped">
+<thead class="thead-light">
+    <tr>
+        <th colspan="4">Claim Detail</th>
+        <th colspan="2">What your provider can charge you</th>
+        <th colspan="3">Your Responsibility</th>
+        <th colspan="3">Total Claim Cost</th>
+    </tr>
+</thead>
+
+<thead class="alert alert-info">
+<tr>
+  <td>Line No.</td>
+  <td>Date of Service</td>
+  <td>Service Description</td>
+  <td>Claim Status</td>
+  <td>Provider Charges</td>
+  <td>Allowed Charges</td>
+  <td>Co-Pay</td>
+  <td>Deductible</td>
+  <td>Co-Insurance</td>
+  <td>Paid By Insurer</td>
+  <td>What You Owe</td>
+  <td>Remark Code</td>
+</tr>
+</thead>
+
+<tr *ngFor="let sl of selectedClaim.services">
+    <td>{{sl.sequence}}</td>
+    <td>{{sl.servicePeriodStart}}</td>
+    <td>{{sl.categoryDisplay}}</td>
+    <td>{{selectedClaim.status}}</td>
+    <td>{{sl.submittedCharges}}</td>
+    <td>{{sl.allowedCharges}}</td>
+    <td></td>
+    <td>{{sl.deductibleAmount}}</td>
+    <td>{{sl.coinsurance}}</td>
+    <td>{{sl.providerPayment}}</td>
+    <td></td>
+    <td>PDC</td>  
+</tr>
+      
+</table>
+</div>
+  
+<div class="col-md-12 row">
+<p><b>Remark Code:</b> PDC - Billed amount is higher than the maximum payment insurance allows. The payment is for the allowed amount. 
+</div>
+
